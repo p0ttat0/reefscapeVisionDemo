@@ -1,19 +1,16 @@
 from ultralytics import YOLO
 import cv2
-import  time
 
-# Load a model
+
 model = YOLO("best.torchscript", task="detect")  # load a custom model
+camera = cv2.VideoCapture(0)
+detect_threshold = 0.5
 
-#camera
-cap = cv2.VideoCapture(0)
-
-assert cap.isOpened()
+assert camera.isOpened()
 
 try:
     while True:
-        # time.sleep(0.8)
-        ret, frame = cap.read()
+        ret, frame = camera.read()
         if not ret:
             break
 
@@ -31,8 +28,8 @@ try:
 
             # Loop through detections and draw
             for (x1, y1, x2, y2), cls_id, conf in zip(xyxy, cls_ids, confs):
-                if conf > 0.7:
-                    break
+                if conf < 0.7:
+                    continue
 
                 x1, y1, x2, y2 = map(int, (x1, y1, x2, y2))
                 label = f"{prediction.names[cls_id]} {conf:.2f}"
@@ -62,5 +59,5 @@ try:
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 finally:
-    cap.release()
+    camera.release()
     cv2.destroyAllWindows()
