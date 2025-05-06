@@ -12,9 +12,10 @@ assert cap.isOpened()
 
 try:
     while True:
-        time.sleep(0.8)
+        # time.sleep(0.8)
         ret, frame = cap.read()
-        assert ret
+        if not ret:
+            break
 
         #x = 0.32
         #frame = frame[:, round(1280 * x):round(1280 * (1 - x))].transpose(1, 0, 2)
@@ -30,7 +31,7 @@ try:
 
             # Loop through detections and draw
             for (x1, y1, x2, y2), cls_id, conf in zip(xyxy, cls_ids, confs):
-                if confs > 0.7:
+                if conf > 0.7:
                     break
 
                 x1, y1, x2, y2 = map(int, (x1, y1, x2, y2))
@@ -55,10 +56,10 @@ try:
                     lineType=cv2.LINE_AA
                 )
 
-            # Display the image in a window
-            cv2.imshow('YOLOv8 Detections', frame)
-        # Press 'q' to exit
-        if cv2.waitKey(0) & 0xFF == ord('q'):
+        # Display the image in a window
+        cv2.imshow('YOLOv8 Detections', frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 finally:
     cap.release()
