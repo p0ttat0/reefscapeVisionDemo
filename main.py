@@ -4,7 +4,7 @@ import cv2
 
 model = YOLO("best.torchscript", task="detect")  # load a custom model
 camera = cv2.VideoCapture(0)
-detect_threshold = 0.5
+confidence_threshold = 0.5
 
 assert camera.isOpened()
 
@@ -28,7 +28,7 @@ try:
 
             # Loop through detections and draw
             for (x1, y1, x2, y2), cls_id, conf in zip(xyxy, cls_ids, confs):
-                if conf < 0.7:
+                if conf < confidence_threshold:
                     continue
 
                 x1, y1, x2, y2 = map(int, (x1, y1, x2, y2))
@@ -54,7 +54,7 @@ try:
                 )
 
         # Display the image in a window
-        cv2.imshow('YOLOv8 Detections', frame)
+        cv2.imshow('YOLOv11 Detections', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
