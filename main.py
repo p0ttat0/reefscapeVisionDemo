@@ -1,10 +1,9 @@
 from ultralytics import YOLO
 import cv2
 
-
-model = YOLO("best.torchscript", task="detect")  # load a custom model
+model = YOLO("nano.torchscript", task="detect")  # load a custom model
 camera = cv2.VideoCapture(0)
-confidence_threshold = 0.5
+confidence_threshold = 0.6
 
 assert camera.isOpened()
 
@@ -14,10 +13,8 @@ try:
         if not ret:
             break
 
-        #x = 0.32
-        #frame = frame[:, round(1280 * x):round(1280 * (1 - x))].transpose(1, 0, 2)
-
         # Inference
+        frame = cv2.resize(frame, (320, 240))
         predictions = model(frame, imgsz=[256, 320])
 
         for prediction in predictions:
