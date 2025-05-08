@@ -3,7 +3,7 @@ import cv2
 
 model = YOLO("nano.torchscript", task="detect")  # load a custom model
 camera = cv2.VideoCapture(0)
-confidence_threshold = 0.6
+confidence_threshold = 0
 
 assert camera.isOpened()
 
